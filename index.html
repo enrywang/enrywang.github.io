@@ -3,187 +3,233 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>你的名字 · 黄金交易分析与 AI 工具</title>
+<title>NickTrader · 多市场交易日志与方法论</title>
 <style>
   :root{
     --bg:#0d0f14; --bg2:#141822; --card:#1a1f2b; --line:#2a3140;
     --gold:#c9a227; --gold-l:#e6c65c; --txt:#e8eaf0; --sub:#9aa3b5;
-    --up:#26a69a; --down:#ef5350;
+    --up:#26a69a; --down:#ef5350; --purple:#7e57c2; --blue:#2196f3;
   }
   *{margin:0;padding:0;box-sizing:border-box}
-  body{background:var(--bg);color:var(--txt);font-family:"PingFang SC","Microsoft YaHei","Helvetica Neue",sans-serif;line-height:1.7}
+  body{background:var(--bg);color:var(--txt);font-family:"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.7}
   a{color:var(--gold-l);text-decoration:none}
-  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
-  /* NAV */
-  nav{position:sticky;top:0;z-index:99;background:rgba(13,15,20,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+  nav{position:sticky;top:0;z-index:99;background:rgba(13,15,20,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
   nav .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
-  .logo{color:var(--gold);font-weight:700;font-size:18px;letter-spacing:1px}
-  .nav-links a{color:var(--sub);margin-left:24px;font-size:14px;transition:.2s}
+  .logo{color:var(--gold);font-weight:700;font-size:17px;letter-spacing:1px}
+  .nav-links a{color:var(--sub);margin-left:22px;font-size:14px;transition:.2s}
   .nav-links a:hover{color:var(--gold-l)}
-  /* HERO */
-  header{padding:110px 0 80px;background:radial-gradient(ellipse at 70% -20%,rgba(201,162,39,.14),transparent 60%)}
+  header{padding:100px 0 70px;background:radial-gradient(ellipse at 70% -20%,rgba(201,162,39,.15),transparent 60%)}
   .tag{display:inline-block;border:1px solid var(--gold);color:var(--gold-l);font-size:12px;padding:4px 14px;border-radius:99px;letter-spacing:2px;margin-bottom:20px}
-  h1{font-size:44px;line-height:1.25;margin-bottom:16px}
+  h1{font-size:42px;line-height:1.3;margin-bottom:16px}
   h1 em{color:var(--gold);font-style:normal}
-  .hero-sub{color:var(--sub);font-size:17px;max-width:640px;margin-bottom:32px}
+  .hero-sub{color:var(--sub);font-size:16px;max-width:660px;margin-bottom:32px}
   .btns{display:flex;gap:14px;flex-wrap:wrap}
   .btn{display:inline-block;padding:12px 28px;border-radius:8px;font-size:15px;transition:.2s}
   .btn-gold{background:var(--gold);color:#0d0f14;font-weight:600}
   .btn-gold:hover{background:var(--gold-l)}
   .btn-ghost{border:1px solid var(--line);color:var(--txt)}
   .btn-ghost:hover{border-color:var(--gold)}
-  /* SECTION */
-  section{padding:72px 0}
+  section{padding:70px 0}
   section:nth-of-type(even){background:var(--bg2)}
-  .sec-title{font-size:28px;margin-bottom:8px}
+  .sec-title{font-size:27px;margin-bottom:8px}
   .sec-title::before{content:"◆ ";color:var(--gold)}
-  .sec-sub{color:var(--sub);margin-bottom:36px;font-size:15px}
-  /* GOLD SECTION */
-  .gold-grid{display:grid;grid-template-columns:1.35fr 1fr;gap:28px;align-items:start}
-  .chart-card{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
-  .chart-card img{width:100%;display:block}
-  .quote-bar{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--line)}
-  .quote-bar .px{font-size:24px;font-weight:700}
-  .quote-bar .chg{font-size:14px;padding:3px 10px;border-radius:6px}
-  .neg{background:rgba(239,83,80,.15);color:var(--down)}
+  .sec-sub{color:var(--sub);margin-bottom:34px;font-size:15px}
+  /* MARKET TICKER */
+  .market-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+  .m-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px;transition:.2s}
+  .m-card:hover{border-color:var(--gold);transform:translateY(-3px)}
+  .m-card .m-name{font-size:13px;color:var(--sub);letter-spacing:1px;display:flex;justify-content:space-between}
+  .m-card .m-icon{font-size:18px}
+  .m-card .m-px{font-size:26px;font-weight:700;margin:8px 0 2px}
+  .m-card .m-chg{font-size:13px;padding:2px 10px;border-radius:6px;display:inline-block}
+  .m-card .m-note{font-size:12px;color:var(--sub);margin-top:10px;border-top:1px dashed var(--line);padding-top:8px}
   .pos{background:rgba(38,166,154,.15);color:var(--up)}
-  .chart-foot{padding:10px 18px;color:var(--sub);font-size:12px}
-  .stats{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  .stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
-  .stat .k{color:var(--sub);font-size:12px;letter-spacing:1px}
-  .stat .v{font-size:19px;font-weight:600;margin-top:4px}
-  .stat .v.gold{color:var(--gold-l)}
-  .report-list{margin-top:14px;display:flex;flex-direction:column;gap:10px}
-  .report-item{display:flex;justify-content:space-between;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 18px;transition:.2s}
-  .report-item:hover{border-color:var(--gold)}
-  .report-item .d{color:var(--sub);font-size:13px}
-  .pill{font-size:12px;padding:3px 12px;border-radius:99px;border:1px solid var(--line);color:var(--sub)}
-  .pill.watch{border-color:var(--gold);color:var(--gold-l)}
-  /* AI SECTION */
-  .ai-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:22px}
-  .ai-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:26px;transition:.25s;position:relative;overflow:hidden}
-  .ai-card:hover{transform:translateY(-4px);border-color:var(--gold)}
-  .ai-icon{width:46px;height:46px;border-radius:10px;background:rgba(201,162,39,.12);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:16px}
-  .ai-card h3{font-size:18px;margin-bottom:8px}
-  .ai-card p{color:var(--sub);font-size:14px;margin-bottom:16px}
+  .neg{background:rgba(239,83,80,.15);color:var(--down)}
+  /* METHOD CARDS */
+  .card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
+  .mth-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:24px;transition:.25s}
+  .mth-card:hover{transform:translateY(-4px);border-color:var(--gold)}
+  .mth-card .no{font-size:13px;color:var(--gold);letter-spacing:2px}
+  .mth-card h3{font-size:18px;margin:6px 0 8px}
+  .mth-card p{color:var(--sub);font-size:14px}
+  /* ARTICLE LIST */
+  .art{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 22px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;gap:16px;transition:.2s}
+  .art:hover{border-color:var(--gold)}
+  .art .t{font-size:16px;font-weight:600}
+  .art .meta{font-size:12px;color:var(--sub);margin-top:4px}
+  .cat{font-size:12px;padding:3px 12px;border-radius:99px;white-space:nowrap}
+  .cat.gold{border:1px solid var(--gold);color:var(--gold-l)}
+  .cat.cn{border:1px solid var(--down);color:#ef9a9a}
+  .cat.us{border:1px solid var(--blue);color:#90caf9}
+  .cat.crypto{border:1px solid var(--purple);color:#b39ddb}
+  .cat.mind{border:1px solid var(--up);color:#80cbc4}
+  /* VIBE CODING */
+  .vc-card{background:linear-gradient(135deg,var(--card),#1c2130);border:1px solid var(--line);border-radius:14px;padding:26px;transition:.25s;position:relative;overflow:hidden}
+  .vc-card:hover{border-color:var(--purple);transform:translateY(-4px)}
+  .vc-card .vc-badge{position:absolute;top:18px;right:18px;font-size:11px;background:rgba(126,87,194,.2);color:#b39ddb;padding:3px 12px;border-radius:99px;letter-spacing:1px}
+  .vc-icon{font-size:26px;margin-bottom:14px}
+  .vc-card h3{font-size:18px;margin-bottom:8px}
+  .vc-card p{color:var(--sub);font-size:14px;margin-bottom:16px}
   .tags{display:flex;gap:8px;flex-wrap:wrap}
   .tags span{font-size:12px;color:var(--sub);background:var(--bg);border:1px solid var(--line);padding:2px 10px;border-radius:99px}
+  /* JOURNAL */
+  .jn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px}
+  .jn-card{background:var(--card);border-left:3px solid var(--gold);border-radius:0 12px 12px 0;padding:22px}
+  .jn-card .date{font-size:12px;color:var(--gold);letter-spacing:1px}
+  .jn-card h3{font-size:17px;margin:6px 0 8px}
+  .jn-card p{color:var(--sub);font-size:14px}
   /* ABOUT */
-  .about-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:40px;align-items:center}
-  .avatar{width:100%;aspect-ratio:1;border-radius:16px;background:linear-gradient(135deg,#1a1f2b,#2a2410);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:56px}
+  .about-grid{display:grid;grid-template-columns:1fr 1.5fr;gap:40px;align-items:center}
+  .avatar{width:100%;aspect-ratio:1;border-radius:16px;background:linear-gradient(135deg,#1a1f2b,#2a2410);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:52px}
   .about-grid p{color:var(--sub);margin-bottom:14px;font-size:15px}
   .contact-line{margin-top:22px;display:flex;gap:14px;flex-wrap:wrap}
   footer{border-top:1px solid var(--line);padding:32px 0;color:var(--sub);font-size:12px;text-align:center}
-  @media(max-width:860px){
-    .gold-grid,.about-grid{grid-template-columns:1fr}
-    h1{font-size:32px}
-    .nav-links{display:none}
-  }
+  @media(max-width:860px){h1{font-size:30px}.about-grid{grid-template-columns:1fr}.nav-links{display:none}}
 </style>
+<base target="_blank">
 </head>
 <body>
 
 <nav><div class="wrap">
-  <div class="logo">AU · ANALYST</div>
+  <div class="logo">⚡ NICKTRADER</div>
   <div class="nav-links">
-    <a href="#gold">黄金分析</a><a href="#ai">AI 作品</a><a href="#about">关于我</a>
+    <a href="#markets">市场速览</a><a href="#method">交易方法论</a><a href="#posts">技术帖</a><a href="#journal">交易感悟</a><a href="#tools">交易工具</a><a href="#vibe">Vibe Coding</a><a href="#about">关于</a>
   </div>
 </div></nav>
 
 <header><div class="wrap">
-  <span class="tag">GOLD TRADER × AI BUILDER</span>
-  <h1>用<em>数据</em>看黄金，<br>用<em>AI</em>放大交易与工作效率</h1>
-  <p class="hero-sub">这里记录我的每日黄金行情分析、量化工具实践，以及我开发的 AI 技能插件。观点基于公开数据与个人复盘，不构成投资建议。</p>
+  <span class="tag">黄金 × A股 × 美股 × 加密 × AI TOOLS</span>
+  <h1>一个多市场交易者的<em>方法论</em>、<em>复盘</em>与<em>工具</em></h1>
+  <p class="hero-sub">这里记录我在黄金、A股、美股、加密市场的交易日志与思考沉淀——从技术指标到仓位哲学，从手工盯盘到用 AI 和代码武装交易。所有内容仅为个人学习记录，不构成投资建议。</p>
   <div class="btns">
-    <a class="btn btn-gold" href="#gold">看今日分析 →</a>
-    <a class="btn btn-ghost" href="#ai">浏览 AI 作品</a>
+    <a class="btn btn-gold" href="#markets">看今日市场 →</a>
+    <a class="btn btn-ghost" href="#method">读交易方法论</a>
+    <a class="btn btn-ghost" href="#vibe">看 Vibe Coding 作品</a>
   </div>
 </div></header>
 
-<!-- ============ 黄金分析 ============ -->
-<section id="gold"><div class="wrap">
-  <h2 class="sec-title">黄金每日分析</h2>
-  <p class="sec-sub">COMEX 期金（GC=F）· 技术面自动计算 + 基本面个人解读 · 每日更新</p>
-
-  <div class="gold-grid">
-    <div class="chart-card">
-      <div class="quote-bar">
-        <div><span style="color:var(--sub);font-size:13px">GC=F 收盘 · 2026-10-21</span><br>
-          <span class="px">4137.0</span> <span class="chg neg">-0.14%</span></div>
-        <span class="pill watch">🔍 观察：贴近 20 日支撑</span>
-      </div>
-      <img src="gold_daily_chart.png" alt="黄金日线技术分析图">
-      <div class="chart-foot">RSI 42.3 ｜ MACD 绿柱收敛 ｜ 空头排列 ｜ 20日区间 4091 — 4352 ｜ ATR 68</div>
+<!-- ============ 市场速览 ============ -->
+<section id="markets"><div class="wrap">
+  <h2 class="sec-title">市场速览</h2>
+  <p class="sec-sub">每日收盘自动更新 · 数据截至 2026-10-21</p>
+  <div class="market-grid">
+    <div class="m-card">
+      <div class="m-name"><span>🥇 黄金 GC=F</span><span class="m-icon">期货</span></div>
+      <div class="m-px">4,137.0</div>
+      <span class="m-chg neg">-0.14%</span>
+      <div class="m-note">贴近20日支撑4091，MACD绿柱收敛，空头动能衰减</div>
     </div>
-
-    <div>
-      <div class="stats">
-        <div class="stat"><div class="k">RSI (14)</div><div class="v">42.3 中性偏弱</div></div>
-        <div class="stat"><div class="k">20日支撑 / 阻力</div><div class="v gold">4091 / 4352</div></div>
-        <div class="stat"><div class="k">美元指数相关性(6M)</div><div class="v">-0.53 负相关</div></div>
-        <div class="stat"><div class="k">ATR (14)</div><div class="v">68 点</div></div>
-      </div>
-      <div class="report-list">
-        <a class="report-item" href="gold_daily_report_template.md">
-          <div><b>每日分析报告 · 10-21</b><div class="d">技术面 + 基本面 + 交易计划</div></div>
-          <span>→</span></a>
-        <a class="report-item" href="#gold">
-          <div><b>历史报告归档</b><div class="d">近期 30 篇复盘</div></div>
-          <span>→</span></a>
-        <a class="report-item" href="#ai">
-          <div><b>分析工具是怎么做的</b><div class="d">Python 自动抓取 + 指标计算 + 图表生成</div></div>
-          <span>→</span></a>
-      </div>
+    <div class="m-card">
+      <div class="m-name"><span>🇨🇳 上证指数</span><span class="m-icon">A股</span></div>
+      <div class="m-px">3,713</div>
+      <span class="m-chg neg">-0.60%</span>
+      <div class="m-note">3700点上方震荡整固，关注量能配合</div>
     </div>
+    <div class="m-card">
+      <div class="m-name"><span>🇺🇸 标普500</span><span class="m-icon">美股</span></div>
+      <div class="m-px">7,713</div>
+      <span class="m-chg pos">+0.28%</span>
+      <div class="m-note">高位窄幅整理，财报季个股分化加大</div>
+    </div>
+    <div class="m-card">
+      <div class="m-name"><span>₿ 比特币</span><span class="m-icon">加密</span></div>
+      <div class="m-px">$83,093</div>
+      <span class="m-chg pos">+0.18%</span>
+      <div class="m-note">8.3万附近整固，波动率持续压缩</div>
+    </div>
+  </div>
+  <p style="color:var(--sub);font-size:12px;margin-top:18px">📊 详细技术分析图：<a href="gold_daily_chart.png">黄金日线（MA/布林/MACD/RSI）</a> ｜ <a href="gold_daily_report_template.md">每日分析报告模板</a></p>
+</div></section>
+
+<!-- ============ 交易方法论 ============ -->
+<section id="method"><div class="wrap">
+  <h2 class="sec-title">交易方法论 · 教学</h2>
+  <p class="sec-sub">我用来穿越牛熊的底层框架，持续更新</p>
+  <div class="card-grid">
+    <div class="mth-card"><div class="no">01 / 趋势</div><h3>趋势跟踪体系</h3><p>如何在多头市场拿住利润、在空头市场忍住不抄底。均线系统（MA20/50/200）的多周期共振用法。</p></div>
+    <div class="mth-card"><div class="no">02 / 波段</div><h3>波段交易框架</h3><p>用支撑阻力 + ATR 设定盈亏比的波段打法，适用于黄金和加密的高波动特性。</p></div>
+    <div class="mth-card"><div class="no">03 / 风控</div><h3>仓位与资金管理</h3><p>单笔风险 1-2% 法则、凯利公式实战修正、连续亏损后的降仓规则。活着比赚钱重要。</p></div>
+    <div class="mth-card"><div class="no">04 / 心理</div><h3>交易心理学</h3><p>如何识别和处理 FOMO、报复性交易、盈利后的过度自信——亏损大多亏在心态而非技术。</p></div>
+    <div class="mth-card"><div class="no">05 / 跨市场</div><h3>多市场联动分析</h3><p>美元指数、美债收益率与黄金的负相关，美股与风险资产的共振，用相关性矩阵找交易线索。</p></div>
+    <div class="mth-card"><div class="no">06 / 复盘</div><h3>每日复盘 SOP</h3><p>我的收盘后 30 分钟复盘流程：行情记录 → 信号检查 → 交易日志 → 情绪标记，形成数据闭环。</p></div>
   </div>
 </div></section>
 
-<!-- ============ AI 作品 ============ -->
-<section id="ai"><div class="wrap">
-  <h2 class="sec-title">AI 技能插件作品</h2>
-  <p class="sec-sub">把重复性工作交给 AI —— 以下为我的开源/个人项目</p>
+<!-- ============ 技术帖 ============ -->
+<section id="posts"><div class="wrap">
+  <h2 class="sec-title">技术帖</h2>
+  <p class="sec-sub">实战干货 · 从指标到代码</p>
+  <div class="art">
+    <div><div class="t">用 Python 自动计算支撑阻力位：从 20 日极值到 ATR 外推</div><div class="meta">黄金 · pandas · 2026-10</div></div>
+    <span class="cat gold">黄金</span>
+  </div>
+  <div class="art">
+    <div><div class="t">RSI 的三种实战用法：超买超卖、背离、失败摆动</div><div class="meta">技术指标 · 全市场通用</div></div>
+    <span class="cat us">方法论</span>
+  </div>
+  <div class="art">
+    <div><div class="t">A股打板客必须懂的集合竞价语言</div><div class="meta">A股 · 短线 · 待更新</div></div>
+    <span class="cat cn">A股</span>
+  </div>
+  <div class="art">
+    <div><div class="t">比特币链上数据入门：MVRV、交易所净流量怎么用</div><div class="meta">加密 · 链上分析 · 待更新</div></div>
+    <span class="cat crypto">加密</span>
+  </div>
+  <div class="art">
+    <div><div class="t">美股财报季的交易策略：波动率收缩后的突破</div><div class="meta">美股 · 事件驱动 · 待更新</div></div>
+    <span class="cat us">美股</span>
+  </div>
+</div></section>
 
-  <div class="ai-grid">
-    <div class="ai-card">
-      <div class="ai-icon">📈</div>
-      <h3>黄金日报生成器</h3>
-      <p>自动抓取行情 → 计算 RSI/MACD/支撑阻力 → 输出图文分析报告，每日定时运行。</p>
-      <div class="tags"><span>Python</span><span>pandas</span><span>自动化</span></div>
-    </div>
-    <div class="ai-card">
-      <div class="ai-icon">🧩</div>
-      <h3>插件作品 2</h3>
-      <p>一句话介绍这个插件解决什么问题、为谁服务、效果如何，附截图或 GIF 更佳。</p>
-      <div class="tags"><span>LLM</span><span>API</span><span>你的技术栈</span></div>
-    </div>
-    <div class="ai-card">
-      <div class="ai-icon">⚡</div>
-      <h3>插件作品 3</h3>
-      <p>一句话介绍这个插件解决什么问题、为谁服务、效果如何，附截图或 GIF 更佳。</p>
-      <div class="tags"><span>Agent</span><span>Workflow</span><span>你的技术栈</span></div>
-    </div>
-    <div class="ai-card">
-      <div class="ai-icon">🛠️</div>
-      <h3>插件作品 4</h3>
-      <p>一句话介绍这个插件解决什么问题、为谁服务、效果如何，附截图或 GIF 更佳。</p>
-      <div class="tags"><span>RAG</span><span>Python</span><span>你的技术栈</span></div>
-    </div>
+<!-- ============ 交易感悟 ============ -->
+<section id="journal"><div class="wrap">
+  <h2 class="sec-title">交易感悟</h2>
+  <p class="sec-sub">亏损交的学费，换个形式存下来</p>
+  <div class="jn-grid">
+    <div class="jn-card"><div class="date">2026-10 · 黄金</div><h3>在支撑区被止损了，但这笔交易是对的</h3><p>价格跌破 4091 触发止损。复盘看，进场的逻辑（支撑+背离）依然成立，止损位置也合理——市场没有常胜，只有概率。</p></div>
+    <div class="jn-card"><div class="date">2026-09 · 心态</div><h3>连续盈利后，我主动停了三天</h3><p>五连阳后明显感觉到自己想"加速"。历史上这种状态下我的胜率骤降，停下来比交易本身更需要纪律。</p></div>
+    <div class="jn-card"><div class="date">2026-08 · 方法论</div><h3>砍掉一半指标后，账户曲线反而好看了</h3><p>从 12 个指标减到 4 个（MA、MACD、RSI、ATR），规则变简单，执行反而变严格。交易系统做减法。</p></div>
+  </div>
+</div></section>
+
+<!-- ============ 交易工具 ============ -->
+<section id="tools"><div class="wrap">
+  <h2 class="sec-title">交易工具</h2>
+  <p class="sec-sub">把重复劳动交给代码 · 开源/自用</p>
+  <div class="card-grid">
+    <div class="vc-card"><div class="vc-icon">📈</div><h3>多市场日报生成器</h3><p>自动抓取黄金/A股/美股/加密行情 → 计算技术指标 → 生成图文日报，每日定时推送，本页"市场速览"即其产出。</p><div class="tags"><span>Python</span><span>pandas</span><span>GitHub Actions</span></div></div>
+    <div class="vc-card"><div class="vc-icon">🎯</div><h3>支撑阻力计算器</h3><p>输入品种自动输出关键价位：20日极值、枢轴点、ATR 外推止损位，支持一键导出到交易计划表。</p><div class="tags"><span>Python</span><span>技术指标</span></div></div>
+    <div class="vc-card"><div class="vc-icon">📓</div><h3>交易日志 & 复盘系统</h3><p>记录每笔进出场、截图、情绪标签，自动生成胜率/盈亏比/最大回撤统计，用数据对抗自我感觉良好。</p><div class="tags"><span>Notion</span><span>自动化</span></div></div>
+  </div>
+</div></section>
+
+<!-- ============ VIBE CODING ============ -->
+<section id="vibe"><div class="wrap">
+  <h2 class="sec-title">Vibe Coding 作品</h2>
+  <p class="sec-sub">和 AI 结对编程的产物 · 想法 → 产品，几小时搞定</p>
+  <div class="card-grid">
+    <div class="vc-card"><span class="vc-badge">VIBE CODED</span><div class="vc-icon">🌐</div><h3>这个网站本身</h3><p>用 AI 辅助从零生成的多市场个人站：行情卡片、方法论、感悟、作品集——包括 GitHub Pages 部署和 Cloudflare 域名配置全流程。</p><div class="tags"><span>HTML/CSS</span><span>GitHub Pages</span><span>Cloudflare</span></div></div>
+    <div class="vc-card"><span class="vc-badge">VIBE CODED</span><div class="vc-icon">🤖</div><h3>AI 提示词库 · 交易版</h3><p>整理了一套金融分析专用提示词：研报解读、财报摘要、宏观数据点评，让 AI 成为你的免费分析师助理。</p><div class="tags"><span>Prompt Engineering</span><span>LLM</span></div></div>
+    <div class="vc-card"><span class="vc-badge">VIBE CODED</span><div class="vc-icon">📊</div><h3>盯盘小助手</h3><p>价格突破关键位自动发通知到微信/飞书，告别全天盯盘。支持黄金、股票、加密多品种。</p><div class="tags"><span>Serverless</span><span>Webhook</span><span>待发布</span></div></div>
+    <div class="vc-card"><span class="vc-badge">VIBE CODED</span><div class="vc-icon">🧪</div><h3>策略回测沙盒</h3><p>用自然语言描述策略，AI 生成回测代码并输出收益曲线——不写代码也能验证交易想法。</p><div class="tags"><span>Backtrader</span><span>LLM</span><span>进行中</span></div></div>
   </div>
 </div></section>
 
 <!-- ============ 关于 ============ -->
 <section id="about"><div class="wrap">
   <h2 class="sec-title">关于我</h2>
-  <p class="sec-sub">交易是认知的变现，AI 是杠杆</p>
+  <p class="sec-sub">交易是认知的变现，代码是认知的杠杆</p>
   <div class="about-grid">
-    <div class="avatar">🪙</div>
+    <div class="avatar">⚡</div>
     <div>
-      <p>你好，我是一名黄金交易者，也是 AI 工具的开发者。白天研究宏观与技术面，晚上写代码把分析流程自动化。</p>
-      <p>这个博客记录两件事：一是我的每日黄金复盘——全部基于公开数据，用 Python 量化计算，拒绝拍脑袋；二是我开发的 AI 插件作品——把交易和工作中重复的事情交给机器。</p>
-      <p>所有内容仅为个人学习记录，不构成任何投资建议。市场有风险，交易需谨慎。</p>
+      <p>你好，我是 Nick。一个同时交易黄金、A股、美股和加密市场的个人交易者，也是一个 Vibe Coder——用 AI 和代码把自己的交易流程自动化。</p>
+      <p>这个网站是我的公开交易日志：方法论是我相信的东西，技术帖是我会的东西，感悟是我付学费换来的东西，工具是我用来省时间的东西。</p>
+      <p>本站所有内容仅为个人学习记录与观点分享，不构成任何投资建议。市场有风险，交易需谨慎。</p>
       <div class="contact-line">
-        <a class="btn btn-ghost" href="#">GitHub</a>
+        <a class="btn btn-ghost" href="https://github.com/enrywang">GitHub</a>
         <a class="btn btn-ghost" href="#">公众号</a>
+        <a class="btn btn-ghost" href="#">X / Twitter</a>
         <a class="btn btn-ghost" href="#">Email</a>
       </div>
     </div>
@@ -191,7 +237,7 @@
 </div></section>
 
 <footer>
-  <div class="wrap">© 2026 你的名字 · 本网站内容为个人复盘与作品展示，不构成投资建议 · Powered by GitHub Pages</div>
+  <div class="wrap">© 2026 NickTrader · nicktrader.win · 个人交易日志与作品展示，不构成投资建议 · Powered by GitHub Pages + Vibe Coding</div>
 </footer>
 
 </body>
