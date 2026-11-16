@@ -210,11 +210,11 @@ button{font:inherit}
 .proof-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:17px}
 .proof-card{border:1px solid rgba(255,255,255,.08);border-radius:15px;padding:13px;background:var(--panel)}
 .proof-image{
-  width:100%;aspect-ratio:4/3;border-radius:9px;display:grid;place-items:center;
+  width:100%;border-radius:9px;display:grid;place-items:center;
   background:linear-gradient(145deg,#20242b,#111317);border:1px dashed rgba(230,202,131,.2);
   color:#777a80;overflow:hidden;font-size:11px
 }
-.proof-image img{width:100%;height:100%;object-fit:cover;display:block}
+.proof-image img{width:100%;height:auto;object-fit:contain;display:block;border-radius:9px}
 .proof-caption{color:#b6b4ad;font-size:11px;padding:12px 4px 2px}
 .proof-hint{text-align:center;color:#777a80;font-size:11px;margin-top:17px}
 
