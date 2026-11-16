@@ -217,6 +217,13 @@ button{font:inherit}
 .proof-image img{width:100%;height:auto;object-fit:contain;display:block;border-radius:9px}
 .proof-caption{color:#b6b4ad;font-size:11px;padding:12px 4px 2px}
 .proof-hint{text-align:center;color:#777a80;font-size:11px;margin-top:17px}
+.proof-image img{cursor:zoom-in}
+.lightbox{
+  display:none;position:fixed;inset:0;z-index:999;background:rgba(9,10,12,.92);
+  align-items:center;justify-content:center;padding:30px;cursor:zoom-out
+}
+.lightbox.open{display:flex}
+.lightbox img{max-width:96%;max-height:92%;border-radius:10px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
 
 /* FAQ + PAYMENT */
 .faq-list{max-width:790px;margin:auto;display:grid;gap:10px}
@@ -759,6 +766,7 @@ const SITE_CONFIG = {
 <footer>
   <div class="container">© <span id="year"></span> NickTrader · Independent Trader & Trading Systems · All rights reserved.</div>
 </footer>
+<div class="lightbox" id="lightbox"><img alt="放大查看"></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
@@ -899,6 +907,27 @@ document.querySelectorAll("#navLinks a").forEach(link=>{
 });
 
 $("year").textContent=new Date().getFullYear();
+// 实盘截图点击放大
+(function(){
+  const box=$("lightbox");
+  const boxImg=box.querySelector("img");
+  document.querySelectorAll(".proof-image img").forEach(img=>{
+    img.addEventListener("click",()=>{
+      if(img.src&&img.naturalWidth>0){
+        boxImg.src=img.src;
+        box.classList.add("open");
+        document.body.style.overflow="hidden";
+      }
+    });
+  });
+  box.addEventListener("click",()=>{
+    box.classList.remove("open");
+    document.body.style.overflow="";
+  });
+  document.addEventListener("keydown",e=>{
+    if(e.key==="Escape"){box.classList.remove("open");document.body.style.overflow="";}
+  });
+})();  
 updatePaymentPanel();
 </script>
 </body>
