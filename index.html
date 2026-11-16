@@ -2,255 +2,904 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NickTrader · 裸K+双均线交易法 | 个人交易体系</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#090a0c">
+<meta name="description" content="NickTrader：11年交易经验，券商与资管背景，程序员经历，自研交易指标与量化系统。">
+<meta property="og:title" content="NickTrader｜独立交易者 · 交易系统与量化工具">
+<meta property="og:description" content="11年交易经验：裸K交易法教程、黄金MT5趋势追踪器、AURUM量化机器人、BTC/ETH TradingView信号系统。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://nicktrader.win">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23c7a454'/%3E%3Ctext x='32' y='45' font-size='38' font-family='Arial' font-weight='bold' text-anchor='middle' fill='%23090a0c'%3EN%3C/text%3E%3C/svg%3E">
+<title>NickTrader｜独立交易者 · 交易系统与量化工具</title>
 <style>
-  :root{
-    --bg:#0b0d12; --bg2:#12151d; --card:#181c26; --line:#2a3140;
-    --gold:#c9a227; --gold-l:#e6c65c; --txt:#e8eaf0; --sub:#9aa3b5;
-    --up:#26a69a; --down:#ef5350; --purple:#7e57c2; --blue:#2196f3;
-  }
-  *{margin:0;padding:0;box-sizing:border-box}
-  body{background:var(--bg);color:var(--txt);font-family:"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.75}
-  a{color:var(--gold-l);text-decoration:none}
-  .wrap{max-width:1120px;margin:0 auto;padding:0 24px}
-  nav{position:sticky;top:0;z-index:99;background:rgba(11,13,18,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
-  .logo{color:var(--gold);font-weight:700;font-size:17px;letter-spacing:1px}
-  .nav-links a{color:var(--sub);margin-left:22px;font-size:14px;transition:.2s}
-  .nav-links a:hover{color:var(--gold-l)}
-  header{padding:105px 0 75px;background:radial-gradient(ellipse at 70% -20%,rgba(201,162,39,.16),transparent 60%)}
-  .tag{display:inline-block;border:1px solid var(--gold);color:var(--gold-l);font-size:12px;padding:4px 14px;border-radius:99px;letter-spacing:2px;margin-bottom:22px}
-  h1{font-size:44px;line-height:1.3;margin-bottom:18px}
-  h1 em{color:var(--gold);font-style:normal}
-  .hero-sub{color:var(--sub);font-size:17px;max-width:680px;margin-bottom:32px}
-  .btns{display:flex;gap:14px;flex-wrap:wrap}
-  .btn{display:inline-block;padding:13px 30px;border-radius:8px;font-size:15px;transition:.2s}
-  .btn-gold{background:var(--gold);color:#0b0d12;font-weight:600}
-  .btn-gold:hover{background:var(--gold-l)}
-  .btn-ghost{border:1px solid var(--line);color:var(--txt)}
-  .btn-ghost:hover{border-color:var(--gold)}
-  section{padding:80px 0}
-  section:nth-of-type(even){background:var(--bg2)}
-  .sec-title{font-size:28px;margin-bottom:8px}
-  .sec-title::before{content:"◆ ";color:var(--gold)}
-  .sec-sub{color:var(--sub);margin-bottom:36px;font-size:15px}
-  .about-grid{display:grid;grid-template-columns:300px 1fr;gap:44px;align-items:start}
-  .avatar{width:100%;aspect-ratio:1;border-radius:18px;background:linear-gradient(135deg,#1a1f2b,#2a2410);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:60px}
-  .about-grid p{color:var(--sub);margin-bottom:14px;font-size:15px}
-  .principles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:22px 0}
-  .pri{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
-  .pri .k{color:var(--sub);font-size:11px;letter-spacing:1px}
-  .pri .v{font-size:16px;font-weight:600;margin-top:3px;color:var(--gold-l)}
-  .donate{background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:32px;margin-top:30px}
-  .donate h3{font-size:20px;margin-bottom:8px}
-  .donate .dp{color:var(--sub);font-size:13.5px;max-width:600px;margin-bottom:22px}
-  .wallets{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
-  .wallet{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
-  .wallet .w-name{font-size:13.5px;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:8px}
-  .wallet .addr{font-family:monospace;font-size:11.5px;color:var(--sub);word-break:break-all;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:9px;margin-bottom:9px}
-  .copy-btn{font-size:12px;padding:5px 16px;border-radius:6px;border:1px solid var(--gold);background:transparent;color:var(--gold-l);cursor:pointer;transition:.2s}
-  .copy-btn:hover{background:var(--gold);color:#0b0d12}
-  .course{background:linear-gradient(135deg,#1a1608,#181c26 55%);border:1px solid var(--gold);border-radius:18px;padding:38px;display:grid;grid-template-columns:1.1fr 1fr;gap:38px;align-items:center;margin-bottom:40px}
-  .course h3{font-size:25px;margin-bottom:12px}
-  .course .desc{color:var(--sub);font-size:15px;margin-bottom:18px}
-  .outline{list-style:none;margin-bottom:22px}
-  .outline li{padding:8px 0;border-bottom:1px dashed var(--line);font-size:14.5px}
-  .outline li::before{content:"✦ ";color:var(--gold)}
-  .pdf-box{background:var(--bg);border:1px solid var(--line);border-radius:12px;overflow:hidden}
-  .pdf-box iframe{width:100%;height:420px;border:0}
-  .pdf-foot{padding:11px 16px;font-size:12px;color:var(--sub);display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line)}
-  .pillar-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
-  .pillar{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px 22px;transition:.25s}
-  .pillar:hover{border-color:var(--gold);transform:translateY(-4px)}
-  .pillar .no{font-size:12px;color:var(--gold);letter-spacing:2px}
-  .pillar h3{font-size:18px;margin:8px 0 8px}
-  .pillar p{color:var(--sub);font-size:14px}
-  .art{display:flex;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 22px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;gap:16px;transition:.2s}
-  .art:hover{border-color:var(--gold)}
-  .art .t{font-size:16px;font-weight:600}
-  .art .meta{font-size:12px;color:var(--sub);margin-top:4px}
-  .cat{font-size:12px;padding:3px 12px;border-radius:99px;white-space:nowrap}
-  .cat.theory{border:1px solid var(--gold);color:var(--gold-l)}
-  .cat.cognition{border:1px solid var(--purple);color:#b39ddb}
-  .cat.skill{border:1px solid var(--up);color:#80cbc4}
-  .cat.story{border:1px solid var(--line);color:var(--sub)}
-  .tool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px}
-  .tool{background:linear-gradient(135deg,var(--card),#1c2130);border:1px solid var(--line);border-radius:14px;padding:26px;transition:.25s;position:relative;overflow:hidden}
-  .tool:hover{border-color:var(--blue);transform:translateY(-4px)}
-  .tool .badge{position:absolute;top:18px;right:18px;font-size:11px;background:rgba(33,150,243,.15);color:#90caf9;padding:3px 12px;border-radius:99px;letter-spacing:1px}
-  .tool .icon{font-size:26px;margin-bottom:14px}
-  .tool h3{font-size:18px;margin-bottom:8px}
-  .tool p{color:var(--sub);font-size:14px;margin-bottom:16px}
-  .tags{display:flex;gap:8px;flex-wrap:wrap}
-  .tags span{font-size:12px;color:var(--sub);background:var(--bg);border:1px solid var(--line);padding:2px 10px;border-radius:99px}
-  footer{border-top:1px solid var(--line);padding:32px 0;color:var(--sub);font-size:12px;text-align:center}
-  @media(max-width:900px){.course{grid-template-columns:1fr}.about-grid{grid-template-columns:1fr}h1{font-size:31px}.nav-links{display:none}}
-</style>
-</head>
-<body>
-
-<nav><div class="wrap">
-  <div class="logo">⚡ NICKTRADER</div>
-  <div class="nav-links">
-    <a href="#about">关于我</a><a href="#teach">交易教学</a><a href="#cognition">认知方法论</a><a href="#tools">交易工具</a>
-  </div>
-</div></nav>
-
-<header><div class="wrap">
-  <span class="tag">独立交易者 · 裸K+双均线体系实践者</span>
-  <h1>删掉多余指标后，<br>我用<em>裸K + 双均线</em>看清了市场</h1>
-  <p class="hero-sub">这是一个交易者的方法论陈列馆：我的理论、认知、方法，全部来自实盘而非书本。没有圣杯，只有概率、纪律和一套验证了三年的简单系统。</p>
-  <div class="btns">
-    <a class="btn btn-gold" href="#teach">📕 学我的交易法</a>
-    <a class="btn btn-ghost" href="#cognition">读认知方法论</a>
-    <a class="btn btn-ghost" href="#tools">看我的交易工具</a>
-  </div>
-</div></header>
-
-<!-- ============ 1. 关于我 ============ -->
-<section id="about"><div class="wrap">
-  <h2 class="sec-title">关于我</h2>
-  <p class="sec-sub">我是谁，我相信什么，如何联系我</p>
-  <div class="about-grid">
-    <div class="avatar">⚡</div>
-    <div>
-      <p><b style="color:var(--txt)">Nick</b> —— 独立交易者，11年交易经验，「裸K+双均线交易法」体系的实践者。同时交易黄金、A股、美股、加密四个市场，用同一套系统，因为<b style="color:var(--gold-l)">市场不同，人性相同</b>。</p>
-      <p>我不是分析师，不出喊单，不带单。网站的每一篇文章、每一份复盘，都是我实盘账户的镜像。我相信交易可以教，但教的是规则和纪律，不是密码。</p>
-      <div class="principles">
-        <div class="pri"><div class="k">信条 · 一</div><div class="v">先活下来</div></div>
-        <div class="pri"><div class="k">信条 · 二</div><div class="v">顺势不抄底</div></div>
-        <div class="pri"><div class="k">信条 · 三</div><div class="v">简单+重复</div></div>
-        <div class="pri"><div class="k">信条 · 四</div><div class="v">公开记录</div></div>
-      </div>
-      <div class="btns">
-        <a class="btn btn-ghost" href="https://github.com/enrywang">GitHub</a>
-        <a class="btn btn-ghost" href="#">公众号</a>
-        <a class="btn btn-ghost" href="#">X / Twitter</a>
-        <a class="btn btn-ghost" href="mailto:you@example.com">Email</a>
-      </div>
-    </div>
-  </div>
-
-  <div class="donate">
-    <h3>☕ 支持我的创作</h3>
-    <p class="dp">所有内容免费公开，没有付费墙。如果这套体系帮你省下了一笔学费，可以请我喝杯咖啡——这对我坚持更新意义重大。</p>
-    <div class="wallets">
-      <div class="wallet">
-        <div class="w-name">🟠 比特币 BTC</div>
-        <div class="addr" id="btc-addr">bc1qXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</div>
-        <button class="copy-btn" onclick="copyAddr('btc-addr', this)">复制地址</button>
-      </div>
-      <div class="wallet">
-        <div class="w-name">🟣 以太坊 ETH / USDT(ERC20)</div>
-        <div class="addr" id="eth-addr">0xXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</div>
-        <button class="copy-btn" onclick="copyAddr('eth-addr', this)">复制地址</button>
-      </div>
-      <div class="wallet">
-        <div class="w-name">🟢 USDT (TRC20)</div>
-        <div class="addr" id="trx-addr">TXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</div>
-        <button class="copy-btn" onclick="copyAddr('trx-addr', this)">复制地址</button>
-      </div>
-    </div>
-    <p style="margin-top:16px;font-size:12px;color:var(--sub)">⚠️ 仅支持上方标注的网络，转错网络无法找回</p>
-  </div>
-</div></section>
-
-<!-- ============ 2. 交易教学 ============ -->
-<section id="teach"><div class="wrap">
-  <h2 class="sec-title">交易教学</h2>
-  <p class="sec-sub">一套系统，五个支柱 · 全部来自实盘</p>
-
-  <div class="course">
-    <div>
-      <h3>《裸K+双均线交易法》完整版 PDF</h3>
-      <p class="desc">三年实盘打磨的交易系统完整文档：从理论根基到开平仓细则，从止损规则到复盘模板。不讲故事，只给规则——每一条都能被验证、被执行、被复制。</p>
-      <ul class="outline">
-        <li>第一章 · 为什么你要删掉所有指标（理论根基）</li>
-        <li>第二章 · 双均线定趋势：唯一需要的两条线</li>
-        <li>第三章 · 裸K结构：pin bar、吞没、内包线的实战用法</li>
-        <li>第四章 · 三级周期共振：日线定方向，小时线找入场</li>
-        <li>第五章 · 仓位管理与止损规则（含计算模板）</li>
-        <li>第六章 · 每日复盘SOP + 交易日志模板</li>
-      </ul>
-      <div class="btns">
-        <a class="btn btn-gold" href="naked-k-ma-course.pdf" target="_blank">📥 下载完整PDF</a>
-        <a class="btn btn-ghost" href="#about">觉得有用？支持我 →</a>
-      </div>
-    </div>
-    <div class="pdf-box">
-      <!-- ⚠️ 上传 naked-k-ma-course.pdf 到仓库后自动显示预览 -->
-      <iframe src="naked-k-ma-course.pdf#toolbar=0" title="PDF预览"></iframe>
-      <div class="pdf-foot"><span>在线预览 · 建议下载高清版</span><a href="naked-k-ma-course.pdf" target="_blank">全屏打开 ↗</a></div>
-    </div>
-  </div>
-
-  <div class="pillar-grid">
-    <div class="pillar"><div class="no">支柱 01</div><h3>市场不可预测，只能应对</h3><p>放弃预测顶底，只做"如果…就…"的条件单。每笔交易开仓前写好止损——止损是成本，不是失败。</p></div>
-    <div class="pillar"><div class="no">支柱 02</div><h3>简单才能执行</h3><p>从12个指标砍到2根均线，账户曲线反而平滑。复杂系统死在执行，简单系统活在纪律。</p></div>
-    <div class="pillar"><div class="no">支柱 03</div><h3>周期共振过滤</h3><p>日线定多空，4小时找结构，1小时等信号。三级周期自上而下，把逆势单拦在门外。</p></div>
-    <div class="pillar"><div class="no">支柱 04</div><h3>仓位即心态</h3><p>单笔风险固定1%，连亏3笔降半仓。仓位的数学决定心态的稳定——爆仓的根源是仓位，不是方向。</p></div>
-    <div class="pillar"><div class="no">支柱 05</div><h3>止损的艺术</h3><p>止损放在结构失效处，而不是"亏得起"的金额处。被止损但逻辑正确的单子，原样再进一次。</p></div>
-  </div>
-</div></section>
-
-<!-- ============ 3. 认知方法论 ============ -->
-<section id="cognition"><div class="wrap">
-  <h2 class="sec-title">认知方法论</h2>
-  <p class="sec-sub">交易是认知的变现 · 理论、复盘与思考 · 持续更新</p>
-  <a class="art" href="/2026/10/21/why-i-dropped-12-indicators.html">
-    <div><div class="t">我放弃12个指标的那天：复杂是执行力的敌人</div><div class="meta">认知 · 2026-10-21 · 5分钟读</div></div>
-    <span class="cat cognition">认知</span>
-  </a>
-  <div class="art">
-    <div><div class="t">裸K不是"不用指标"，而是把指标翻译回价格本身</div><div class="meta">理论 · 裸K系列 01</div></div>
-    <span class="cat theory">理论</span>
-  </div>
-  <div class="art">
-    <div><div class="t">止损被扫后反手原仓位进回：一笔黄金单子的完整复盘</div><div class="meta">实战复盘 · 黄金</div></div>
-    <span class="cat skill">复盘</span>
-  </div>
-  <div class="art">
-    <div><div class="t">大定方向，小找入场：三级周期共振的过滤逻辑</div><div class="meta">方法 · 裸K系列 02</div></div>
-    <span class="cat theory">方法</span>
-  </div>
-  <div class="art">
-    <div><div class="t">连亏五笔之后，我做了这件事而不是加仓翻本</div><div class="meta">认知 · 心态管理</div></div>
-    <span class="cat cognition">认知</span>
-  </div>
-  <div class="art">
-    <div><div class="t">同一套系统为什么在金股币四个市场都适用</div><div class="meta">理论 · 跨市场</div></div>
-    <span class="cat story">随笔</span>
-  </div>
-</div></section>
-
-<!-- ============ 4. 交易工具 ============ -->
-<section id="tools"><div class="wrap">
-  <h2 class="sec-title">交易工具</h2>
-  <p class="sec-sub">Vibe Coding 开发的 AI 交易工具 · 开源 / 自用</p>
-  <div class="tool-grid">
-    <div class="tool"><span class="badge">VIBE CODED</span><div class="icon">🌐</div><h3>这个网站本身</h3><p>用 AI 辅助从零生成的个人站：课程体系、认知文章、作品集——包括 GitHub Pages 部署和 Cloudflare 域名配置全流程。</p><div class="tags"><span>HTML/CSS</span><span>GitHub Pages</span><span>Cloudflare</span></div></div>
-    <div class="tool"><span class="badge">AUTOMATION</span><div class="icon">📈</div><h3>多市场日报生成器</h3><p>自动抓取黄金/A股/美股/加密行情 → 计算技术指标 → 生成图文日报定时推送，收盘后 5 分钟出稿。</p><div class="tags"><span>Python</span><span>pandas</span><span>GitHub Actions</span></div></div>
-    <div class="tool"><span class="badge">AUTOMATION</span><div class="icon">🎯</div><h3>支撑阻力计算器</h3><p>输入品种自动输出关键价位：20日极值、枢轴点、ATR 外推止损位，一键导出到交易计划表。</p><div class="tags"><span>Python</span><span>技术指标</span></div></div>
-    <div class="tool"><span class="badge">VIBE CODED</span><div class="icon">🤖</div><h3>AI 提示词库 · 交易版</h3><p>整理了一套金融分析专用提示词：研报解读、财报摘要、宏观数据点评，让 AI 成为你的免费分析师助理。</p><div class="tags"><span>Prompt Engineering</span><span>LLM</span></div></div>
-    <div class="tool"><span class="badge">BOT</span><div class="icon">📊</div><h3>盯盘小助手</h3><p>价格突破关键位自动发通知到微信/飞书，告别全天盯盘。支持黄金、股票、加密多品种。</p><div class="tags"><span>Serverless</span><span>Webhook</span></div></div>
-    <div class="tool"><span class="badge">BOT</span><div class="icon">🧪</div><h3>策略回测沙盒</h3><p>用自然语言描述策略，AI 生成回测代码并输出收益曲线——不写代码也能验证交易想法。</p><div class="tags"><span>Backtrader</span><span>LLM</span></div></div>
-  </div>
-</div></section>
-
-<footer>
-  <div class="wrap">© 2026 NickTrader · nicktrader.win · 本站所有内容仅为个人交易记录与认知分享，不构成投资建议 · 市场有风险，交易需谨慎</div>
-</footer>
-
-<script>
-function copyAddr(id, btn){
-  var text = document.getElementById(id).innerText;
-  navigator.clipboard.writeText(text).then(function(){
-    btn.innerText = "✓ 已复制";
-    setTimeout(function(){ btn.innerText = "复制地址"; }, 2000);
-  });
+:root {
+  --bg:#090a0c;
+  --panel:#15181d;
+  --panel2:#1b1f25;
+  --gold:#c7a454;
+  --gold2:#e6ca83;
+  --text:#f1efe9;
+  --muted:#9b9a95;
+  --green:#8ebc9c;
+  --red:#d58b7e;
+  --line:rgba(230,202,131,.18);
+  --max:1160px;
 }
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:85px}
+body{
+  color:var(--text);
+  background:radial-gradient(ellipse at 75% 0%,rgba(199,164,84,.09),transparent 34rem),var(--bg);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+  line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit;text-decoration:none}
+button{font:inherit}
+.container{width:min(var(--max),calc(100% - 40px));margin:auto}
+.gold{color:var(--gold2)}
+.muted{color:var(--muted)}
+.eyebrow{color:var(--gold2);font-size:11px;letter-spacing:.22em;font-weight:700}
+.section{padding:90px 0;border-top:1px solid rgba(255,255,255,.045)}
+.section-head{text-align:center;max-width:700px;margin:0 auto 42px}
+.section-head h2{font-size:clamp(27px,4vw,39px);letter-spacing:-.04em;margin:8px 0}
+.section-head p{color:var(--muted);font-size:13px}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-height:46px;padding:0 22px;border-radius:9px;
+  border:1px solid transparent;cursor:pointer;font-size:12px;
+  font-weight:700;transition:.2s;
+}
+.btn-primary{
+  color:#17130a;background:linear-gradient(135deg,#e5ca87,#b58d3e);
+  box-shadow:0 8px 28px rgba(199,164,84,.14);
+}
+.btn-primary:hover{transform:translateY(-2px);filter:brightness(1.08)}
+.btn-ghost{border-color:rgba(230,202,131,.35);color:var(--gold2);background:transparent}
+.btn-ghost:hover{background:rgba(199,164,84,.09)}
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:rgba(9,10,12,.9);backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(255,255,255,.07)
+}
+.nav{height:68px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:800;letter-spacing:.12em}
+.brand-mark{
+  width:32px;height:32px;display:grid;place-items:center;border-radius:9px;
+  color:#17130a;background:linear-gradient(145deg,#f0d99d,#a98135)
+}
+.nav-links{display:flex;align-items:center;gap:24px}
+.nav-links a{color:#b7b4ac;font-size:12px}
+.nav-links a:hover{color:var(--gold2)}
+.nav-cta{min-height:37px;padding:0 15px;font-size:11px}
+.menu-toggle{
+  display:none;border:1px solid var(--line);color:var(--gold2);
+  background:transparent;border-radius:8px;padding:7px 11px;cursor:pointer
+}
+
+/* HERO */
+.hero{padding:110px 0 90px;position:relative;overflow:hidden}
+.hero:after{
+  content:"";position:absolute;width:500px;height:500px;border-radius:50%;
+  border:1px solid rgba(199,164,84,.08);right:-210px;top:-230px;
+  box-shadow:0 0 0 55px rgba(199,164,84,.018),0 0 0 110px rgba(199,164,84,.012)
+}
+.hero-inner{max-width:850px;margin:auto;text-align:center;position:relative;z-index:1}
+.hero-tag{
+  display:inline-flex;gap:9px;align-items:center;padding:7px 13px;
+  border:1px solid rgba(230,202,131,.28);border-radius:99px;
+  color:var(--gold2);font-size:11px;letter-spacing:.1em;background:rgba(199,164,84,.045)
+}
+.hero h1{font-size:clamp(40px,7vw,76px);line-height:1.15;letter-spacing:-.055em;margin:27px 0 20px}
+.hero h1 span{color:var(--gold2)}
+.hero-copy{max-width:660px;margin:auto;color:#aaa9a2;font-size:14px;line-height:2}
+.hero-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:30px}
+.hero-meta{display:flex;justify-content:center;gap:30px;flex-wrap:wrap;margin-top:52px}
+.meta-item{color:var(--muted);font-size:11px}
+.meta-item strong{display:block;color:var(--text);font-size:18px}
+.meta-divider{width:1px;background:rgba(255,255,255,.1)}
+
+/* ABOUT */
+.intro-grid{display:grid;grid-template-columns:.75fr 1.25fr;gap:55px;align-items:center}
+.profile-card{
+  min-height:340px;border-radius:22px;border:1px solid var(--line);
+  background:linear-gradient(145deg,rgba(199,164,84,.13),rgba(21,24,29,.96) 55%);
+  display:flex;flex-direction:column;justify-content:space-between;padding:30px;
+  box-shadow:0 18px 55px rgba(0,0,0,.28)
+}
+.profile-symbol{font-size:65px;color:var(--gold2);line-height:1}
+.profile-name{font-size:32px;font-weight:800;letter-spacing:-.04em}
+.profile-role{color:var(--muted);font-size:12px;margin-top:3px}
+.profile-bottom{display:flex;justify-content:space-between;gap:12px;color:var(--gold2);font-size:10px;letter-spacing:.13em}
+.intro-copy h2{font-size:clamp(27px,4vw,37px);line-height:1.3;margin:9px 0 18px;letter-spacing:-.04em}
+.intro-copy p{color:#aaa9a2;font-size:13px;margin-bottom:13px}
+.principles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:23px}
+.principle{padding:13px;border:1px solid rgba(255,255,255,.07);border-radius:10px;background:rgba(255,255,255,.02)}
+.principle b{display:block;color:var(--gold2);font-size:12px}
+.principle span{color:var(--muted);font-size:10px}
+
+.bio-story{max-width:900px;margin:60px auto 0}
+.bio-story h3{font-size:24px;margin-bottom:18px}
+.bio-story p{color:#aaa9a2;font-size:13px;line-height:2;margin-bottom:15px}
+.bio-story strong{color:#eee7d7}
+.bio-highlight{
+  margin:27px 0;padding:22px 25px;border-left:2px solid var(--gold);
+  background:rgba(199,164,84,.055);color:var(--gold2);
+  font-size:17px;font-weight:700;line-height:1.8
+}
+.experience-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:28px}
+.experience-item{
+  padding:20px;border:1px solid rgba(255,255,255,.08);
+  border-radius:12px;background:linear-gradient(145deg,#191c21,#111317)
+}
+.experience-item b{display:block;color:var(--gold2);font-size:15px;margin-bottom:5px}
+.experience-item span{color:var(--muted);font-size:11px}
+
+.system-intro{
+  margin-top:65px;padding:38px;border:1px solid rgba(230,202,131,.23);
+  border-radius:16px;background:radial-gradient(ellipse at top right,#292013 0%,transparent 55%),#11100d
+}
+.system-intro h3{font-size:26px;margin:8px 0 17px}
+.system-intro p{color:#aaa9a2;font-size:13px;line-height:2;margin-bottom:13px}
+.system-quote{
+  margin:25px 0;padding:20px 24px;border-left:2px solid var(--gold);
+  background:rgba(199,164,84,.06);color:#c9c3b7;font-size:13px;line-height:2
+}
+.system-quote strong{display:block;color:var(--gold2);margin-top:8px}
+.about-philosophy{display:grid;grid-template-columns:.8fr 1.2fr;gap:45px;padding:60px 0 0}
+.about-philosophy h3{font-size:26px;line-height:1.4}
+.about-philosophy p{color:#aaa9a2;font-size:13px;margin-bottom:14px}
+.philosophy-bottom{display:flex;align-items:center;flex-wrap:wrap;gap:13px;margin-top:22px;color:var(--gold2);font-size:12px;font-weight:700}
+.philosophy-bottom i{color:#66563a;font-style:normal}
+
+/* PRODUCTS */
+.pricing-philosophy{
+  max-width:900px;margin:0 auto 22px;padding:25px 28px;
+  border:1px solid rgba(230,202,131,.24);border-radius:15px;
+  background:linear-gradient(110deg,rgba(199,164,84,.09),rgba(21,24,29,.8))
+}
+.pricing-philosophy h3{font-size:19px;margin:7px 0}
+.pricing-philosophy p{color:#aaa9a2;font-size:12px;margin-top:7px}
+.pricing-philosophy strong{color:var(--gold2)}
+.experience-warning{
+  max-width:900px;margin:0 auto 32px;padding:18px 21px;display:flex;gap:14px;
+  border:1px solid rgba(213,139,126,.3);border-radius:13px;background:rgba(213,139,126,.055)
+}
+.warning-mark{
+  width:27px;height:27px;flex:0 0 27px;display:grid;place-items:center;
+  border-radius:50%;background:rgba(213,139,126,.18);color:#e6a69c;font-weight:800
+}
+.experience-warning strong{color:#e6b2a9;font-size:13px}
+.experience-warning p{color:#aaa9a2;font-size:11px;margin-top:5px}
+.product-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:stretch}
+.product{
+  position:relative;display:flex;flex-direction:column;min-width:0;padding:25px;
+  border-radius:17px;border:1px solid rgba(255,255,255,.09);
+  background:linear-gradient(155deg,#191c21,#111317 70%);transition:.25s
+}
+.product:hover{transform:translateY(-4px);border-color:rgba(230,202,131,.45)}
+.product.featured{border-color:rgba(230,202,131,.65);background:linear-gradient(155deg,#282215,#15171b 68%)}
+.product.mentor{border-color:rgba(179,155,212,.48);background:linear-gradient(155deg,#211c29,#141519 68%)}
+.product-label{
+  position:absolute;top:15px;right:15px;color:var(--gold2);font-size:9px;
+  letter-spacing:.1em;border:1px solid rgba(230,202,131,.28);border-radius:99px;padding:4px 8px
+}
+.product.mentor .product-label{color:#c8b5e8;border-color:rgba(179,155,212,.35)}
+.product-icon{font-size:27px;margin-bottom:13px}
+.product h3{font-size:17px}
+.product-en{color:#777a80;font-size:9px;letter-spacing:.18em;margin:3px 0 16px}
+.product ul{list-style:none;margin:0 0 20px;flex:1}
+.product li{color:#b9b8b1;font-size:11px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.055)}
+.product li:before{content:"＋";color:var(--gold);margin-right:8px}
+.price-row{margin:4px 0 17px}
+.old-price{color:#777a80;text-decoration:line-through;font-size:13px;margin-right:7px}
+.new-price{color:var(--gold2);font-size:28px;font-weight:750;letter-spacing:-.04em}
+.currency{color:var(--muted);font-size:11px;margin-left:4px}
+.discount{display:inline-block;color:#e0a29a;background:rgba(213,139,126,.1);border-radius:5px;padding:2px 6px;font-size:9px;margin-left:6px}
+.product .btn{width:100%}
+.product-note{margin-top:10px;color:#777a80;font-size:10px;text-align:center}
+.comparison-wrap{margin-top:34px;overflow-x:auto;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.015)}
+.comparison{width:100%;min-width:850px;border-collapse:collapse;font-size:11px}
+.comparison th,.comparison td{padding:13px 12px;border-bottom:1px solid rgba(255,255,255,.06);text-align:center}
+.comparison th:first-child,.comparison td:first-child{text-align:left;color:#aaa9a2;min-width:190px}
+.comparison thead th{color:var(--gold2);font-weight:650;background:rgba(199,164,84,.045)}
+.comparison tbody tr:last-child td{border-bottom:0}
+.yes{color:var(--green)}.no{color:#65676d}
+
+/* PROOF */
+.proof-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:17px}
+.proof-card{border:1px solid rgba(255,255,255,.08);border-radius:15px;padding:13px;background:var(--panel)}
+.proof-image{
+  width:100%;aspect-ratio:4/3;border-radius:9px;display:grid;place-items:center;
+  background:linear-gradient(145deg,#20242b,#111317);border:1px dashed rgba(230,202,131,.2);
+  color:#777a80;overflow:hidden;font-size:11px
+}
+.proof-image img{width:100%;height:100%;object-fit:cover;display:block}
+.proof-caption{color:#b6b4ad;font-size:11px;padding:12px 4px 2px}
+.proof-hint{text-align:center;color:#777a80;font-size:11px;margin-top:17px}
+
+/* FAQ + PAYMENT */
+.faq-list{max-width:790px;margin:auto;display:grid;gap:10px}
+details{border:1px solid rgba(255,255,255,.08);border-radius:12px;background:var(--panel);padding:17px 20px}
+summary{cursor:pointer;list-style:none;font-size:13px;font-weight:650}
+summary::-webkit-details-marker{display:none}
+summary:after{content:"+";float:right;color:var(--gold2);font-size:17px}
+details[open] summary:after{content:"−"}
+details p{color:var(--muted);font-size:12px;margin-top:12px;padding-right:20px}
+.buy-layout{display:grid;grid-template-columns:.9fr 1.1fr;gap:20px;align-items:start}
+.buy-steps,.payment-card{
+  border:1px solid rgba(230,202,131,.17);border-radius:17px;
+  background:linear-gradient(150deg,#191b1e,#111317);padding:26px
+}
+.buy-steps h3,.payment-card h3{font-size:18px;margin-bottom:19px}
+.step{display:flex;gap:13px;margin-bottom:20px}
+.step:last-child{margin-bottom:0}
+.step-number{
+  width:27px;height:27px;flex:0 0 27px;border-radius:50%;
+  display:grid;place-items:center;background:var(--gold);color:#17130a;font-size:11px;font-weight:800
+}
+.step b{display:block;font-size:12px;margin-bottom:3px}
+.step p{color:var(--muted);font-size:11px}
+.selected-product{padding:13px 14px;border:1px solid rgba(230,202,131,.2);border-radius:10px;background:rgba(199,164,84,.055);margin-bottom:18px}
+.selected-product small{color:var(--muted);font-size:10px}
+.selected-line{display:flex;justify-content:space-between;gap:12px;align-items:baseline;margin-top:4px}
+.selected-line strong{font-size:13px}
+.selected-line span{color:var(--gold2);font-size:20px;font-weight:750;white-space:nowrap}
+.network-pill{display:inline-flex;align-items:center;gap:7px;color:var(--green);font-size:10px;border:1px solid rgba(142,188,156,.25);padding:4px 9px;border-radius:99px;margin-bottom:12px}
+.wallet-address{padding:14px;border-radius:10px;border:1px solid rgba(230,202,131,.22);background:#0b0d10;margin:10px 0 12px}
+.wallet-address code{display:block;color:var(--gold2);font-family:ui-monospace,Menlo,monospace;font-size:12px;line-height:1.7;overflow-wrap:anywhere}
+.wallet-actions{display:flex;gap:9px;flex-wrap:wrap}
+.wallet-actions .btn{min-height:39px;padding:0 13px;font-size:11px}
+.payment-warning{color:#d9b78a;background:rgba(217,183,138,.07);border-left:2px solid #8e7138;padding:10px 12px;font-size:10px;margin-top:15px}
+.contact-box{margin-top:17px;display:grid;gap:8px}
+.contact-box a{text-align:center}
+.config-note{color:#d9b78a;font-size:10px;margin-top:10px}
+.fine-print{max-width:820px;margin:24px auto 0;color:#74767b;text-align:center;font-size:10px;line-height:1.9}
+footer{border-top:1px solid rgba(255,255,255,.07);padding:27px 0;color:#777a80;font-size:10px;text-align:center}
+.toast{
+  position:fixed;z-index:100;left:50%;bottom:24px;transform:translate(-50%,15px);
+  opacity:0;pointer-events:none;transition:.2s;color:#17130a;background:var(--gold2);
+  border-radius:8px;padding:9px 15px;font-size:11px;font-weight:700
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media(max-width:900px){
+  .nav-links{gap:14px}
+  .nav-links a{font-size:11px}
+  .product-grid{grid-template-columns:repeat(2,1fr)}
+  .intro-grid{gap:30px}
+  .experience-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:680px){
+  .container{width:calc(100% - 32px)}
+  .nav{height:62px}
+  .menu-toggle{display:block}
+  .nav-links{
+    display:none;position:absolute;top:62px;left:0;right:0;padding:15px 22px 20px;
+    background:rgba(9,10,12,.98);border-bottom:1px solid var(--line);
+    flex-direction:column;align-items:stretch;gap:0
+  }
+  .nav-links.open{display:flex}
+  .nav-links a{padding:10px 0;font-size:13px;border-bottom:1px solid rgba(255,255,255,.05)}
+  .nav-cta{display:none}
+  .hero{padding:78px 0 65px}
+  .hero h1{font-size:clamp(38px,11vw,56px)}
+  .hero-copy{font-size:13px}
+  .hero-meta{gap:15px;margin-top:35px}
+  .meta-item strong{font-size:16px}
+  .meta-divider{display:none}
+  .section{padding:65px 0}
+  .intro-grid,.buy-layout,.about-philosophy{grid-template-columns:1fr}
+  .profile-card{min-height:250px}
+  .principles{grid-template-columns:1fr}
+  .product-grid,.proof-grid{grid-template-columns:1fr}
+  .product{padding:23px}
+  .buy-steps,.payment-card{padding:21px}
+  .selected-line{align-items:flex-start;flex-direction:column;gap:0}
+  .bio-story{margin-top:40px}
+  .system-intro{padding:25px 20px}
+  .experience-grid{grid-template-columns:1fr 1fr}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{transition-duration:.01ms!important}
+}
+</style>
+<base target="_blank">
+</head>
+
+<body>
+<script>
+/* 上线前填写真实收款地址和 Telegram 客服链接 */
+const SITE_CONFIG = {
+  USDT_TRC20_ADDRESS: "请替换为你的币安 USDT-TRC20 充值地址",
+  TELEGRAM_URL: "",
+  CONTACT_EMAIL: ""
+};
 </script>
 
+<div class="topbar">
+  <nav class="container nav" aria-label="主导航">
+    <a class="brand" href="#home">
+      <span class="brand-mark">N</span><span>NICKTRADER</span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="#products">交易产品</a>
+      <a href="#about">关于 Nick</a>
+      <a href="#records">实盘与工具</a>
+      <a href="#faq">常见问题</a>
+      <a href="#buy">购买方式</a>
+    </div>
+    <a class="btn btn-ghost nav-cta" href="#products">查看产品 ↗</a>
+    <button class="menu-toggle" id="menuToggle" aria-label="打开导航菜单" aria-expanded="false">☰</button>
+  </nav>
+</div>
+
+<main id="home">
+
+<!-- HERO -->
+<header class="hero">
+  <div class="container hero-inner">
+    <div class="hero-tag">✦ 独立交易者 · 11 年实战经验 · 裸K + 双均线</div>
+    <h1>少一点预测。<br><span>多一点可执行的系统。</span></h1>
+    <p class="hero-copy">
+      我是 Nick。券商与资管出身，做过程序员，也创业做过跨境电商。
+      绕了一圈，我依然选择交易。用裸K与双均线观察不同市场，
+      手动交易与自研量化并行。
+    </p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="#products">探索交易产品 →</a>
+      <a class="btn btn-ghost" href="#about">认识 Nick</a>
+    </div>
+    <div class="hero-meta">
+      <div class="meta-item"><strong>11 年</strong>交易实战经历</div>
+      <div class="meta-divider"></div>
+      <div class="meta-item"><strong>金融 + 技术</strong>跨领域经历</div>
+      <div class="meta-divider"></div>
+      <div class="meta-item"><strong>手动 + 量化</strong>两条执行路径</div>
+    </div>
+  </div>
+</header>
+
+<!-- PRODUCTS -->
+<section class="section" id="products">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">TRADING PRODUCTS</div>
+      <h2>从学习方法，到建立自己的交易系统</h2>
+      <p>不同阶段，不同工具。先了解内容，再决定是否适合自己。</p>
+    </div>
+
+    <div class="pricing-philosophy">
+      <div class="eyebrow">START WITH TRUST</div>
+      <h3>先建立信任，再谈长期合作。</h3>
+      <p>
+        入门包、进阶包和量化系统包，我希望把门槛放低一些。
+        <strong>19.99 / 49.99 / 199.99 USDT</strong>，
+        让你先了解我的交易方法、工具和做事方式。
+      </p>
+      <p>
+        如果你认可这套方法，也确实需要持续使用工具和服务，
+        再考虑 <strong>499.99 USDT 的6个月全能包</strong>，
+        或 <strong>949.99 USDT 的12个月全能包</strong>。
+        不需要一开始就购买最贵的产品。
+      </p>
+    </div>
+
+    <div class="experience-warning">
+      <div class="warning-mark">!</div>
+      <div>
+        <strong>购买前请确认：这些产品不是零基础速成课。</strong>
+        <p>
+          教程、指标和工具主要适合已经有一定交易经验、做过日内交易，
+          但还没有建立完整交易体系的人进阶使用。
+          如果你完全没有交易经验、从未做过日内交易，也不熟悉止损与仓位管理，
+          建议先学习基础知识、用模拟盘练习，暂时不要购买。
+          爆仓不是必修课，也不值得为了“有经验”刻意经历。
+        </p>
+      </div>
+    </div>
+
+    <div class="product-grid">
+
+      <article class="product" data-product="starter">
+        <div class="product-icon">📕</div>
+        <h3>裸K交易法 · 入门包</h3>
+        <div class="product-en">STARTER</div>
+        <ul>
+          <li>裸K交易法文字版教程（完整版）</li>
+          <li>价格行为（Price Action）精讲</li>
+          <li>TG 交易交流群（终身）</li>
+          <li>开平仓规则 + 止损细则</li>
+        </ul>
+        <div class="price-row"><span class="old-price">24.99</span><span class="new-price">19.99</span><span class="currency">USDT</span><span class="discount">-20%</span></div>
+        <button class="btn btn-primary choose-product" data-id="starter">选择入门包 →</button>
+        <div class="product-note">适合想先理解交易框架的人</div>
+      </article>
+
+      <article class="product" data-product="pro">
+        <div class="product-icon">📈</div>
+        <h3>实战进阶包</h3>
+        <div class="product-en">PRO TRADER</div>
+        <ul>
+          <li>包含入门包全部内容</li>
+          <li>实战视频教程（案例复盘）</li>
+          <li>黄金 MT5 趋势追踪器</li>
+          <li>趋势追踪器使用期 3 个月</li>
+        </ul>
+        <div class="price-row"><span class="old-price">64.99</span><span class="new-price">49.99</span><span class="currency">USDT</span><span class="discount">-20%</span></div>
+        <button class="btn btn-primary choose-product" data-id="pro">选择进阶包 →</button>
+        <div class="product-note">适合希望结合工具辅助看盘的人</div>
+      </article>
+
+      <article class="product" data-product="system">
+        <div class="product-icon">🤖</div>
+        <h3>量化系统包</h3>
+        <div class="product-en">SYSTEM</div>
+        <ul>
+          <li>包含进阶包全部内容</li>
+          <li>AURUM 黄金量化交易机器人</li>
+          <li>MT5 自动执行 + 风控模块</li>
+          <li>机器人使用期 3 个月</li>
+        </ul>
+        <div class="price-row"><span class="old-price">249.99</span><span class="new-price">199.99</span><span class="currency">USDT</span><span class="discount">-20%</span></div>
+        <button class="btn btn-primary choose-product" data-id="system">选择系统包 →</button>
+        <div class="product-note">适合希望按规则自动执行的人</div>
+      </article>
+
+      <article class="product featured" data-product="all">
+        <span class="product-label">POPULAR · 热门选择</span>
+        <div class="product-icon">⚡</div>
+        <h3>全能交易包 · 6个月</h3>
+        <div class="product-en">ALL-IN-ONE · 6 MONTHS</div>
+        <ul>
+          <li>包含量化系统包全部内容</li>
+          <li>BTC / ETH TradingView 交易信号机器人（只提供信号，不自动下单）</li>
+          <li>QQQ 美股科技股中长线交易指导</li>
+          <li>TV 信号机器人使用期 6 个月（MT5 工具 6 个月）</li>
+        </ul>
+        <div class="price-row"><span class="old-price">624.99</span><span class="new-price">499.99</span><span class="currency">USDT</span><span class="discount">-20%</span></div>
+        <button class="btn btn-primary choose-product" data-id="all">选择全能包 →</button>
+        <div class="product-note">适合希望获得 BTC / ETH 信号与美股科技股思路的人</div>
+      </article>
+
+      <article class="product featured" data-product="all12">
+        <span class="product-label">BEST VALUE · 12 MONTHS</span>
+        <div class="product-icon">♛</div>
+        <h3>全能交易包 · 12个月</h3>
+        <div class="product-en">ALL-IN-ONE · ANNUAL</div>
+        <ul>
+          <li>包含量化系统包全部内容</li>
+          <li>BTC / ETH TradingView 交易信号机器人（不自动下单）</li>
+          <li>QQQ 美股科技股中长线交易指导</li>
+          <li>相关工具与服务使用期 12 个月</li>
+        </ul>
+        <div class="price-row"><span class="old-price">1187.99</span><span class="new-price">949.99</span><span class="currency">USDT</span><span class="discount">-20%</span></div>
+        <button class="btn btn-primary choose-product" data-id="all12">选择年度全能包 →</button>
+        <div class="product-note">适合确定长期使用、希望一次安排12个月的人</div>
+      </article>
+
+      <article class="product mentor">
+        <span class="product-label">MENTORSHIP</span>
+        <div class="product-icon">🎯</div>
+        <h3>门徒指导包</h3>
+        <div class="product-en">MENTORSHIP</div>
+        <ul>
+          <li>包含全能交易包（12个月版）全部内容</li>
+          <li>交易战法 + 交易心法（独家）</li>
+          <li>1 年期一对一交易指导</li>
+          <li>专属答疑 + 月度复盘会</li>
+        </ul>
+        <div class="price-row"><span class="old-price">2499.99</span><span class="new-price">1999.99</span><span class="currency">USDT</span><span class="discount">-20%</span></div>
+        <button class="btn btn-primary choose-product" data-id="mentor">咨询门徒计划 →</button>
+        <div class="product-note">高阶服务，建议付款前先沟通确认</div>
+      </article>
+
+    </div>
+
+    <!-- 产品对比表：每行均为7列 -->
+    <div class="comparison-wrap">
+      <table class="comparison">
+        <thead>
+          <tr>
+            <th>包含内容</th>
+            <th>📕 入门</th>
+            <th>📈 进阶</th>
+            <th>🤖 系统</th>
+            <th>⚡ 全能6个月</th>
+            <th>♛ 全能12个月</th>
+            <th>🎯 门徒</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>裸K教程 / 价格行为 / TG 群</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td>实战视频教程</td><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td>黄金 MT5 趋势追踪器</td><td class="no">—</td><td>3个月</td><td>3个月</td><td>3个月</td><td>3个月</td><td>3个月</td></tr>
+          <tr><td>AURUM 黄金量化机器人</td><td class="no">—</td><td class="no">—</td><td>3个月</td><td>3个月</td><td>3个月</td><td>3个月</td></tr>
+          <tr><td>BTC / ETH TradingView 信号机器人</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td>6个月</td><td>12个月</td><td>12个月</td></tr>
+          <tr><td>QQQ 美股科技股中长线指导</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="yes">✓</td><td class="yes">✓</td><td class="yes">✓</td></tr>
+          <tr><td>交易战法 + 心法</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="yes">✓</td></tr>
+          <tr><td>一对一指导 / 月度复盘</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td>1年</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section" id="about">
+  <div class="container">
+    <div class="intro-grid">
+      <div class="profile-card">
+        <div class="profile-symbol">✦</div>
+        <div>
+          <div class="profile-name">Nick<span class="gold">.</span></div>
+          <div class="profile-role">独立交易者 / 交易系统开发者</div>
+        </div>
+        <div class="profile-bottom">
+          <span>PRICE ACTION</span><span>TRADING SYSTEM</span>
+        </div>
+      </div>
+
+      <div class="intro-copy">
+        <div class="eyebrow">WHO IS NICK</div>
+        <h2>兜兜转转，<br><span class="gold">我始终没有离开交易市场。</span></h2>
+        <p>我不是一个只会看图说话的交易博主。</p>
+        <p>最早从券商行业起步，后来进入资管领域；之后跨界做过几年程序员，甚至自己创业做过跨境电商。</p>
+        <p>金融、技术、创业，这些经历让我从不同角度理解市场、商业和风险。</p>
+        <p>但兜兜转转，真正让我始终保持热情的，还是交易。</p>
+        <div class="principles">
+          <div class="principle"><b>裸K价格行为</b><span>理解市场结构与价格</span></div>
+          <div class="principle"><b>双均线趋势</b><span>用规则判断方向</span></div>
+          <div class="principle"><b>手动 + 量化</b><span>交易与系统开发并行</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bio-story">
+      <h3>真正让我着迷的，始终是交易。</h3>
+      <p>
+        11年交易经历，经历过盈利，也经历过亏损；尝试过不同的策略，
+        推翻过很多曾经深信不疑的想法。市场让我学会的，不只是如何寻找机会，
+        更是如何面对不确定性、管理风险，以及承认自己的错误。
+      </p>
+      <p>
+        黄金、BTC、美股以及其他交易品种，我更愿意用一套统一的逻辑去理解：
+        裸K观察价格行为，双均线辅助判断趋势，再结合具体市场环境决定是否交易。
+      </p>
+      <div class="bio-highlight">
+        我不喜欢把简单的事情复杂化。<br>
+        交易真正重要的，不是指标有多复杂，而是规则能不能执行。
+      </div>
+
+      <div class="experience-grid">
+        <div class="experience-item"><b>券商 / 资管</b><span>金融行业经历，理解市场与资产管理</span></div>
+        <div class="experience-item"><b>程序员</b><span>跨界开发，具备技术与系统构建能力</span></div>
+        <div class="experience-item"><b>跨境电商创业</b><span>经历商业实践与创业过程</span></div>
+        <div class="experience-item"><b>独立交易者</b><span>长期专注交易、市场研究与系统迭代</span></div>
+      </div>
+    </div>
+
+    <div class="system-intro">
+      <div class="eyebrow">MY TRADING SYSTEM</div>
+      <h3>我的系统，不是拿用户做实验。</h3>
+      <p>
+        网站展示的指标与信号系统，并不是临时拼凑出来的概念产品。
+        从交易逻辑、参数设置到信号规则，都是我根据自己的实战交易经验，
+        一步步总结、设计和打磨出来的。
+      </p>
+      <p>
+        这些系统已经历了数十个版本的迭代。它们不是刚刚写出来、
+        还在寻找有效参数的试验品，而是经过长期开发与实际使用沉淀下来的成熟工具。
+      </p>
+      <div class="system-quote">
+        每一个信号为什么出现？每一条规则解决什么问题？
+        什么市场环境下有效？什么情况下应该放弃交易？
+        <strong>我更在意的是这些问题，而不只是指标看起来有多复杂。</strong>
+      </div>
+      <p>
+        我希望交付给你的，不只是几个指标、几条信号，
+        而是一套有逻辑、有规则、能够理解和验证的交易工具。
+      </p>
+    </div>
+
+    <div class="about-philosophy">
+      <div>
+        <div class="eyebrow">MY PHILOSOPHY</div>
+        <h3>我想做的，<br>不只是卖一套工具。</h3>
+      </div>
+      <div>
+        <p>
+          我不承诺让你一夜暴富，也不保证任何策略永远有效。
+          市场会变化，策略有适用边界，交易更需要纪律和风险管理。
+        </p>
+        <p>
+          我希望把这些年积累的交易经验、方法和工具分享出来，
+          让已经有一定交易基础、却始终没有形成完整交易体系的人，
+          少走一些弯路。
+        </p>
+        <div class="philosophy-bottom">
+          <span>先理解方法</span><i>→</i><span>再使用工具</span><i>→</i><span>建立交易体系</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RECORDS -->
+<section class="section" id="records">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">IN ACTION</div>
+      <h2>工具与实盘记录</h2>
+      <p>用真实截图展示工具界面与使用场景。请替换为你自己的原始记录。</p>
+    </div>
+    <div class="proof-grid">
+      <div class="proof-card">
+        <div class="proof-image"><img src="record-1.png" alt="黄金 MT5 趋势追踪器截图" onerror="this.parentElement.textContent='替换图片：record-1.png'"></div>
+        <div class="proof-caption">黄金 MT5 日内 · 趋势追踪器</div>
+      </div>
+      <div class="proof-card">
+        <div class="proof-image"><img src="record-2.png" alt="AURUM 黄金量化机器人截图" onerror="this.parentElement.textContent='替换图片：record-2.png'"></div>
+        <div class="proof-caption">AURUM 机器人 · 黄金量化执行</div>
+      </div>
+      <div class="proof-card">
+        <div class="proof-image"><img src="record-3.png" alt="BTC / ETH TradingView 信号截图" onerror="this.parentElement.textContent='替换图片：record-3.png'"></div>
+        <div class="proof-caption">BTC / ETH · TradingView 信号系统</div>
+      </div>
+    </div>
+    <p class="proof-hint">建议展示策略信号、参数界面、模拟盘运行记录和可核验的实盘记录。截图请隐去账户隐私信息。</p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" id="faq">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">FAQ</div>
+      <h2>购买前，先把问题说清楚</h2>
+      <p>工具怎么运行、怎么交付、风险在哪里，提前了解再决定。</p>
+    </div>
+    <div class="faq-list">
+      <details>
+        <summary>BTC / ETH 交易信号机器人会自动下单吗？</summary>
+        <p>不会。全能交易包中的 BTC / ETH TradingView 工具用于生成和提示交易信号，不是自动交易机器人，不会替你连接交易所或自动开仓平仓。是否下单、仓位大小与风险控制由你自行决定。</p>
+      </details>
+      <details>
+        <summary>MT5 黄金量化机器人需要全天开机吗？</summary>
+        <p>MT5 机器人需要电脑或 VPS 持续运行 MT5。具体部署要求以对应产品交付说明为准。</p>
+      </details>
+      <details>
+        <summary>可以先在模拟盘测试吗？</summary>
+        <p>建议先在模拟盘充分测试，熟悉信号、执行方式和风险，再自行决定是否用于实盘。模拟盘表现不代表实盘结果。</p>
+      </details>
+      <details>
+        <summary>购买后如何交付？</summary>
+        <p>付款经人工核实后，通过 Telegram 与你确认产品并安排交付。教程类按约定发送；涉及软件的产品会提供对应安装说明。具体交付时间以沟通确认为准。</p>
+      </details>
+      <details>
+        <summary>使用期限怎么算？</summary>
+        <p>入门教程与群权益按产品说明执行；各指标和机器人的使用期限以产品对比表为准。续期与更新安排需在到期前另行确认。</p>
+      </details>
+      <details>
+        <summary>交易机器人能保证盈利吗？</summary>
+        <p>不能。任何指标、策略或机器人都无法保证盈利，也可能出现连续亏损、滑点、断线、执行偏差及极端行情风险。请先充分测试，并自行控制仓位与风险。</p>
+      </details>
+      <details>
+        <summary>可以退款吗？</summary>
+        <p>付款前请先确认产品内容、兼容环境、使用期限和交付方式。数字内容或软件交付后的退款规则，请在付款前通过客服书面确认。</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- BUY -->
+<section class="section" id="buy">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">ORDER & PAYMENT</div>
+      <h2>简单、直接，人工确认交付</h2>
+      <p>只收一个 USDT-TRC20 地址。不接入支付接口，不自动扣款；每笔订单由人工核实链上交易。</p>
+    </div>
+
+    <div class="buy-layout">
+      <div class="buy-steps">
+        <h3>购买流程</h3>
+        <div class="step">
+          <span class="step-number">1</span>
+          <div><b>选择你要的产品</b><p>从六款产品中选择，页面会自动带入产品名称与价格。</p></div>
+        </div>
+        <div class="step">
+          <span class="step-number">2</span>
+          <div><b>通过币安 USDT-TRC20 转账</b><p>核对网络、地址与金额。转账前确认提币页面选择的是 TRON（TRC20）网络。</p></div>
+        </div>
+        <div class="step">
+          <span class="step-number">3</span>
+          <div><b>把 TxID 和产品名称发给客服</b><p>发送交易哈希（TxID）、产品名称及付款金额。人工核实到账后安排交付。</p></div>
+        </div>
+      </div>
+
+      <div class="payment-card">
+        <h3>付款信息</h3>
+        <div class="selected-product">
+          <small>当前选择的产品</small>
+          <div class="selected-line">
+            <strong id="selectedName">裸K交易法 · 入门包</strong>
+            <span id="selectedPrice">19.99 USDT</span>
+          </div>
+        </div>
+        <div class="network-pill">● USDT · TRON（TRC20）</div>
+        <div class="wallet-address"><code id="walletAddress">TPNcNckhuNWLT8LL1AJLAHPwJSEjWCX4os</code></div>
+        <div class="wallet-actions">
+          <button class="btn btn-primary" id="copyWallet">复制收款地址</button>
+          <button class="btn btn-ghost" id="copyOrder">复制订单信息</button>
+        </div>
+        <div class="payment-warning">
+          重要：仅向此处配置的 USDT-TRC20 地址转账。不要使用 ERC20、BEP20 或其他网络。
+          转错网络或地址可能导致资产无法找回。请先核对地址首尾字符。
+        </div>
+        <div class="contact-box">
+          <a class="btn btn-ghost" id="telegramLink" href="#buy">付款后联系 Telegram 客服 ↗</a>
+          <a class="btn btn-ghost" id="emailLink" href="#buy" style="display:none">📧 邮件联系（附 TxID 截图）</a>
+        </div>
+        <p class="config-note" id="configNote">上线前请在 HTML 顶部 SITE_CONFIG 中填写真实钱包地址与 Telegram 客服链接。</p>
+      </div>
+    </div>
+
+    <p class="fine-print">
+      NickTrader 提供交易教育内容、指标与软件工具，不提供个性化投资建议，不代客理财，不承诺任何收益。
+      金融市场存在本金损失风险；自动化工具不能消除市场风险、技术风险或执行风险。
+      过往表现不代表未来结果。付款前请确认产品内容、兼容性、服务期限与退款规则。
+    </p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="container">© <span id="year"></span> NickTrader · Independent Trader & Trading Systems · All rights reserved.</div>
+</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const PRODUCTS = {
+  starter:{name:"裸K交易法 · 入门包",price:"19.99"},
+  pro:{name:"实战进阶包",price:"49.99"},
+  system:{name:"量化系统包",price:"199.99"},
+  all:{name:"全能交易包 · 6个月",price:"499.99"},
+  all12:{name:"全能交易包 · 12个月",price:"949.99"},
+  mentor:{name:"门徒指导包",price:"1999.99"}
+};
+
+let selectedProductId="starter";
+const $=id=>document.getElementById(id);
+
+function showToast(message){
+  const toast=$("toast");
+  toast.textContent=message;
+  toast.classList.add("show");
+  clearTimeout(showToast.timer);
+  showToast.timer=setTimeout(()=>toast.classList.remove("show"),2300);
+}
+
+function isWalletConfigured(){
+  const address=(SITE_CONFIG.USDT_TRC20_ADDRESS||"").trim();
+  return address.length>20&&!address.includes("请替换")&&!address.includes("XXXX");
+}
+
+function updatePaymentPanel(){
+  const product=PRODUCTS[selectedProductId];
+  $("selectedName").textContent=product.name;
+  $("selectedPrice").textContent=product.price+" USDT";
+  $("walletAddress").textContent=isWalletConfigured()
+    ?SITE_CONFIG.USDT_TRC20_ADDRESS.trim()
+    :"请先在代码配置区填写币安 USDT-TRC20 充值地址";
+
+  const telegram=(SITE_CONFIG.TELEGRAM_URL||"").trim();
+  const link=$("telegramLink");
+
+  if(telegram){
+    link.href=telegram;
+    link.target="_blank";
+    link.rel="noopener noreferrer";
+    link.setAttribute("aria-disabled","false");
+  }else{
+    link.href="#buy";
+    link.removeAttribute("target");
+    link.setAttribute("aria-disabled","true");
+    link.onclick=function(event){
+      event.preventDefault();
+      showToast("商家尚未配置 Telegram 客服，请联系邮箱或等待配置完成");
+    };
+  }
+
+  const email=(SITE_CONFIG.CONTACT_EMAIL||"").trim();
+  const emailLink=$("emailLink");
+  if(email){
+    emailLink.href="mailto:"+email+"?subject="+encodeURIComponent("NickTrader 订单确认（附 TxID）");
+    emailLink.style.display="";
+  }else{
+    emailLink.style.display="none";
+  }
+
+  $("configNote").hidden=isWalletConfigured()&&!!telegram;
+
+  if(!isWalletConfigured()){
+    $("configNote").textContent="尚未配置收款地址：请编辑 HTML 顶部 SITE_CONFIG.USDT_TRC20_ADDRESS。不要把占位文字直接部署为收款地址。";
+  }else if(!telegram){
+    $("configNote").textContent="钱包地址已配置；请再填写 SITE_CONFIG.TELEGRAM_URL，买家才能联系你提交 TxID。";
+  }else{
+    $("configNote").textContent="";
+  }
+}
+
+async function copyText(text,successMessage){
+  if(!text){showToast("没有可复制的内容");return}
+  try{
+    if(navigator.clipboard&&window.isSecureContext){
+      await navigator.clipboard.writeText(text);
+    }else{
+      const area=document.createElement("textarea");
+      area.value=text;
+      area.style.position="fixed";
+      area.style.opacity="0";
+      document.body.appendChild(area);
+      area.select();
+      const ok=document.execCommand("copy");
+      area.remove();
+      if(!ok)throw new Error("copy failed");
+    }
+    showToast(successMessage);
+  }catch(error){
+    showToast("复制失败，请手动复制");
+  }
+}
+
+document.querySelectorAll(".choose-product").forEach(button=>{
+  button.addEventListener("click",()=>{
+    selectedProductId=button.dataset.id;
+    updatePaymentPanel();
+    $("buy").scrollIntoView({behavior:"smooth"});
+  });
+});
+
+$("copyWallet").addEventListener("click",()=>{
+  if(!isWalletConfigured()){
+    showToast("请先配置真实的 TRC20 收款地址");
+    return;
+  }
+  copyText(SITE_CONFIG.USDT_TRC20_ADDRESS.trim(),"收款地址已复制，请核对网络与地址");
+});
+
+$("copyOrder").addEventListener("click",()=>{
+  const product=PRODUCTS[selectedProductId];
+  const address=isWalletConfigured()?SITE_CONFIG.USDT_TRC20_ADDRESS.trim():"待商家配置";
+  const order=`NickTrader 订单
+产品：${product.name}
+金额：${product.price} USDT
+网络：USDT-TRC20
+收款地址：${address}
+付款后请将 TxID 发送给客服，等待人工核实。`;
+  copyText(order,"订单信息已复制");
+});
+
+$("menuToggle").addEventListener("click",()=>{
+  const links=$("navLinks");
+  const open=links.classList.toggle("open");
+  $("menuToggle").setAttribute("aria-expanded",String(open));
+  $("menuToggle").textContent=open?"✕":"☰";
+});
+
+document.querySelectorAll("#navLinks a").forEach(link=>{
+  link.addEventListener("click",()=>{
+    $("navLinks").classList.remove("open");
+    $("menuToggle").setAttribute("aria-expanded","false");
+    $("menuToggle").textContent="☰";
+  });
+});
+
+$("year").textContent=new Date().getFullYear();
+updatePaymentPanel();
+</script>
 </body>
 </html>
